@@ -19,37 +19,48 @@ module SpecMaker
 	end
 	schema = csdl[:Edmx][:DataServices][:Schema]
 
-	puts "Staring..."
-
+	puts "Starting..."
 	# Process all Enums. Load in memory.
-	schema[:EnumType].each do |item|
-		puts "-> Processing Enum #{item[:Name]}"
-		enum = {}
-		if item[:IsFlags] 
-			enum[:isExclusive] = false
-		else
-			enum[:isExclusive] = true
+	begin
+
+		schema[:EnumType].each do |item|
+			puts "-> Processing Enum #{item[:Name]}"
+			enum = {}
+			if item[:IsFlags] 
+				enum[:isExclusive] = false
+			else
+				enum[:isExclusive] = true
+			end
+			enum[:options] = {}
+			item[:Member].each do |member|
+				entry = {}
+				entry[:value] = member[:Value]
+				entry[:description] = ""
+				enum[:options][member[:Name].to_sym] = entry
+			end	
+			@enum_objects[camelcase(item[:Name]).to_sym] = enum
+			@ienums = @ienums + 1
 		end
-		enum[:options] = {}
-		item[:Member].each do |member|
-			entry = {}
-			entry[:value] = member[:Value]
-			entry[:description] = ""
-			enum[:options][member[:Name].to_sym] = entry
-		end	
-		@enum_objects[camelcase(item[:Name]).to_sym] = enum
-		@ienums = @ienums + 1
+		
+		File.open(ENUMS, "w") do |f|
+			f.write(JSON.pretty_generate @enum_objects, :encoding => 'UTF-8')
+		end
+
+		rescue
+			puts "No Enums found."
 	end
 
-	File.open(ENUMS, "w") do |f|
-		f.write(JSON.pretty_generate @enum_objects, :encoding => 'UTF-8')
-	end
+
 
 	# # Process ACTIONS
-	schema[:Action].each do |item|		
-		puts "-> Processing Action #{item[:Name]}"
-		@iaction = @iaction + 1
-		process_method(item, 'action')
+	begin
+		schema[:Action].each do |item|		
+			puts "-> Processing Action #{item[:Name]}"
+			@iaction = @iaction + 1
+			process_method(item, 'action')
+		end
+		rescue
+			puts "No actions found."
 	end
 
 	# # Process FUNCTIONS
@@ -171,13 +182,17 @@ module SpecMaker
 		end
 
 		# PROCESS Navigation Properties
-		if entity[:NavigationProperty].is_a?(Array)
-			entity[:NavigationProperty].each do |item|		
-				@json_object[:properties].push process_navigation(entity[:Name], item)
-			end
-		elsif entity[:NavigationProperty].is_a?(Hash)
+		begin
+			if entity[:NavigationProperty].is_a?(Array)
+				entity[:NavigationProperty].each do |item|		
+					@json_object[:properties].push process_navigation(entity[:Name], item)
+				end
+			elsif entity[:NavigationProperty].is_a?(Hash)
 
-			@json_object[:properties].push process_navigation(entity[:Name], entity[:NavigationProperty])
+				@json_object[:properties].push process_navigation(entity[:Name], entity[:NavigationProperty])
+			end
+			rescue
+				# Skip if no navigation found
 		end
 
 		# Add methods and pull in methods from base type.

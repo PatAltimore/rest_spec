@@ -16,8 +16,8 @@ module SpecMaker
 		example_lines.push HEADER3 + "Example" + NEWLINE		
 		case type 
 		when 'auto_post'
-			example_lines.push HEADER5 + "Request" + NEWLINE											
-			example_lines.push "Here is an example of the request." + NEWLINE
+			example_lines.push HEADER5 + "Request" + TWONEWLINES										
+			# example_lines.push "Here is an example of the request." + NEWLINE
 			example_lines.push get_json_request_pretext("create_#{method[:returnType]}_from_#{@jsonHash[:name]}".downcase) + NEWLINE
 			example_lines.push '```http' + NEWLINE
 			httpSyntax = get_syntax('auto_post', top_one_restpath, pathAppend, nil, SERVER)
@@ -31,7 +31,7 @@ module SpecMaker
 			example_lines.push "In the request body, supply a JSON representation of [#{method[:returnType]}](../resources/#{method[:returnType].downcase}.md) object." + NEWLINE
 
 			example_lines.push HEADER5 + "Response" + NEWLINE											
-			example_lines.push "Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
+			example_lines.push "Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
 			example_lines.push get_json_response_pretext(method[:returnType]) + NEWLINE
 			modeldump = get_json_model_method(method[:returnType], false, true, true)
 			#modeldump = get_json_model_method(method[:returnType])
