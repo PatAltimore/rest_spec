@@ -43,8 +43,8 @@ module SpecMaker
 			example_lines.push "```" + NEWLINE				
 
 		when 'auto_get', 'auto_list'
-			example_lines.push HEADER5 + "Request" + NEWLINE				
-			example_lines.push "Here is an example of the request." + NEWLINE			
+			example_lines.push HEADER5 + "Request" + TWONEWLINES				
+			# example_lines.push "Here is an example of the request." + NEWLINE			
 			example_lines.push get_json_request_pretext("get_#{@jsonHash[:name]}".downcase) + NEWLINE
 			example_lines.push '```http' + NEWLINE
 			httpSyntax = get_syntax('auto_get', top_one_restpath, nil, nil, SERVER)
@@ -53,7 +53,7 @@ module SpecMaker
 			example_lines.push "```" + NEWLINE	
 
 			example_lines.push HEADER5 + "Response" + NEWLINE											
-			example_lines.push "Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
+			example_lines.push "Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
 			if type == 'auto_list'
 				modeldump = get_json_model_method(@jsonHash[:collectionOf], true)
 				example_lines.push get_json_response_pretext(@jsonHash[:collectionOf], true) + NEWLINE
@@ -72,8 +72,8 @@ module SpecMaker
 
 		when 'auto_patch'
 
-			example_lines.push HEADER5 + "Request" + NEWLINE											
-			example_lines.push "Here is an example of the request." + NEWLINE
+			example_lines.push HEADER5 + "Request" + TWONEWLINES											
+			# example_lines.push "Here is an example of the request." + NEWLINE
 			example_lines.push get_json_request_pretext("update_#{@jsonHash[:name]}".downcase) + NEWLINE						
 
 			example_lines.push '```http' + NEWLINE
@@ -85,7 +85,7 @@ module SpecMaker
 			example_lines.push modeldump + NEWLINE	
 			example_lines.push "```" + NEWLINE	
 			example_lines.push HEADER5 + "Response" + NEWLINE	
-			example_lines.push "Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
+			example_lines.push "Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
 			example_lines.push get_json_response_pretext(@jsonHash[:name]) + NEWLINE
 			modeldump = get_json_model_method(@jsonHash[:name])
 			example_lines.push "```http" + NEWLINE
@@ -96,8 +96,8 @@ module SpecMaker
 			example_lines.push "```" + NEWLINE	
 
 		when 'auto_delete'
-			example_lines.push HEADER5 + "Request" + NEWLINE
-			example_lines.push "Here is an example of the request." + NEWLINE			
+			example_lines.push HEADER5 + "Request" + TWONEWLINES
+			# example_lines.push "Here is an example of the request." + NEWLINE			
 			example_lines.push get_json_request_pretext("delete_#{@jsonHash[:name]}".downcase) + NEWLINE						
 			example_lines.push '```http' + NEWLINE
 			httpSyntax = get_syntax(method[:name], top_one_restpath, nil, nil, SERVER)
@@ -105,15 +105,15 @@ module SpecMaker
 			example_lines.push '```' + NEWLINE
 
 			example_lines.push HEADER5 + "Response" + NEWLINE	
-			example_lines.push "Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE													
+			example_lines.push "Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE													
 			example_lines.push get_json_response_pretext(nil) + NEWLINE						
 			example_lines.push "```http" + NEWLINE
 			example_lines.push "HTTP/1.1 204 No Content" + NEWLINE
 			example_lines.push "```" + NEWLINE	
 		else
-			example_lines.push "Here is an example of how to call this API." + NEWLINE					
+			# example_lines.push "Here is an example of how to call this API." + NEWLINE					
 			example_lines.push HEADER5 + "Request" + NEWLINE		
-			example_lines.push "Here is an example of the request." + NEWLINE			
+			# example_lines.push "Here is an example of the request." + NEWLINE			
 			example_lines.push get_json_request_pretext("#{@jsonHash[:name].downcase}_#{method[:name]}".downcase) + NEWLINE
 			example_lines.push '```http' + NEWLINE
 			httpSyntax = get_syntax(method[:name], top_one_restpath, nil, nil, SERVER)
@@ -131,7 +131,7 @@ module SpecMaker
 			example_lines.push '```' + TWONEWLINES
 
 			example_lines.push HEADER5 + "Response" + NEWLINE	
-			example_lines.push "Here is an example of the response. "
+			# example_lines.push "Here is an example of the response. "
 
 			if method[:returnType] != nil && method[:returnType] != 'None'
 				example_lines.push "Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
@@ -266,7 +266,7 @@ module SpecMaker
 		# Header and description	
 
 		if method[:displayName].empty?
-			h1name = "#{@jsonHash[:name]}: #{method[:name]}"
+			h1name = "#{@jsonHash[:name]}: #{method[:name].downcase}"
 		else
 			h1name = "#{method[:displayName]}" 
 		end
@@ -298,6 +298,7 @@ module SpecMaker
 		actionLines.push HTTP_HEADER
 		actionLines.push TABLE_2ND_LINE_2COL
 		actionLines.push HTTP_HEADER_SAMPLE + NEWLINE
+		actionLines.push "| Content-Type  | application/json |" + NEWLINE
 		actionLines.push NEWLINE
 		
 		#Request body
@@ -544,7 +545,7 @@ module SpecMaker
 		# Header and description	
 		
 		if @jsonHash[:updateDescription].empty?
-			h1name = "Update #{@jsonHash[:name].downcase}"
+			h1name = "Update #{@jsonHash[:name]}"
 		else
 			h1name = "#{@jsonHash[:updateDescription]}"
 		end
@@ -574,6 +575,7 @@ module SpecMaker
 		patchMethodLines.push "| Name       | Description|" + NEWLINE
 		patchMethodLines.push "|:-----------|:-----------|" + NEWLINE
 		patchMethodLines.push HTTP_HEADER_SAMPLE  + NEWLINE
+		patchMethodLines.push "| Content-Type  | application/json |" + NEWLINE
 		patchMethodLines.push NEWLINE
 		
 		#Request body
@@ -685,7 +687,7 @@ module SpecMaker
 				else
 					if isProperty 
 						returnLink = "[" + @jsonHash[:name] + "](" + @jsonHash[:name].downcase + ".md)"			
-						@mdlines.push "|[Get #{@jsonHash[:name]}](../api/#{@jsonHash[:name].downcase}_get.md) | #{returnLink} |Read properties and relationships of #{uncapitalize @jsonHash[:name]} object.|" + NEWLINE
+						@mdlines.push "|[Get #{@jsonHash[:name].downcase}](../api/#{@jsonHash[:name].downcase}_get.md) | #{returnLink} |Read properties and relationships of #{uncapitalize @jsonHash[:name]} object.|" + NEWLINE
 					end
 				end
 				create_get_method
@@ -741,7 +743,7 @@ module SpecMaker
 							listLink = "../api/#{filename}"
 
 							# puts "$----> #{filename} #{@jsonHash[:name]},, #{prop[:name]}"
-							@mdlines.push "|[List #{prop[:name]}](#{listLink}) |#{returnLink} collection| Get a #{useName} object collection.|" + NEWLINE
+							@mdlines.push "|[List #{prop[:name].downcase}](#{listLink}) |#{returnLink} collection| Get a #{useName} object collection.|" + NEWLINE
 							saveJsonHash = deep_copy @jsonHash
 							@jsonHash[:name] = prop[:name]
 							@jsonHash[:collectionOf] = prop[:dataType]							
@@ -757,7 +759,7 @@ module SpecMaker
 
 			if patchable
 				returnLink = "[" + @jsonHash[:name] + "](" + @jsonHash[:name].downcase + ".md)"			
-				@mdlines.push "|[Update](../api/#{@jsonHash[:name].downcase}_update.md) | #{returnLink}	|Update #{@jsonHash[:name]} object. |" + NEWLINE
+				@mdlines.push "|[Update](../api/#{@jsonHash[:name].downcase}_update.md) | #{returnLink}	|Update #{@jsonHash[:name].downcase} object. |" + NEWLINE
 				create_patch_method propreties
 				# mtd = deep_copy(@struct[:method]) 
 				# mtd[:name] = 'auto_patch'
@@ -776,7 +778,7 @@ module SpecMaker
 				mtd[:name] = 'auto_delete'
 				
 				if @jsonHash[:deleteDescription].empty?
-					mtd[:description] = mtd[:description] = "Delete #{@jsonHash[:name]}."
+					mtd[:description] = mtd[:description] = "Delete #{@jsonHash[:name].downcase}."
 				else
 					mtd[:description] = @jsonHash[:deleteDescription]
 				end				
@@ -883,7 +885,7 @@ module SpecMaker
 		@serviceroot.each do |item|			
 			if item[:collectionOf]
 				useName = item[:collectionOf]					
-				postName = "Create " + useName
+				postName = "Create " + useName.downcase
 				filename = "#{item[:collectionOf].downcase}_post_#{item[:name].downcase}.md"
 				postLink = "../api/#{item[:collectionOf].downcase}_post_#{item[:name].downcase}.md"					
 				returnLink = "[" + item[:collectionOf]	 + "](" + item[:collectionOf].downcase + ".md)"
