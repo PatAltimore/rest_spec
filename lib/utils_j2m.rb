@@ -25,15 +25,15 @@ module SpecMaker
 
 	TABLE_2ND_LINE =  "|:---------------|:--------|:----------|" + NEWLINE
 	TABLE_2ND_LINE_2COL =  "|:---------------|:----------|" + NEWLINE
-	PROPERTY_HEADER = "| Property	   | Type	|Description|" + NEWLINE
-	PARAM_HEADER = "| Parameter	   | Type	|Description|" + NEWLINE
-	HTTP_HEADER =  "| Name       | Description|" + NEWLINE
-	RELATIONSHIP_HEADER = "| Relationship | Type	|Description|" + NEWLINE
-	TASKS_HEADER = "| Method		   | Return Type	|Description|" + NEWLINE
+	PROPERTY_HEADER = "| Property | Type | Description |" + NEWLINE
+	PARAM_HEADER = "| Parameter | Type | Description |" + NEWLINE
+	HTTP_HEADER =  "| Name | Description |" + NEWLINE
+	RELATIONSHIP_HEADER = "| Relationship | Type | Description |" + NEWLINE
+	TASKS_HEADER = "| Method | Return Type | Description |" + NEWLINE
 
-	PREREQ = HEADER3 + "Prerequisites" + NEWLINE + "The following **scopes** are required to execute this API: " + NEWLINE
+	PREREQ = HEADER3 + "Prerequisites" + TWONEWLINES + "The following **scopes** are required to execute this API: " + NEWLINE
 
-	QRY_HEADER = "|Name|Value|Description|"
+	QRY_HEADER = "| Name | Value | Description |"
 	QRY_2nd_LINE = "|:---------------|:--------|:-------|"
 	QRY_EXPAND = "|$expand|string|Comma-separated list of relationships to expand and include in the response. " 
 	QRY_FILTER  = "|$filter|string|Filter string that lets you filter the response based on a set of criteria.|"
@@ -44,7 +44,7 @@ module SpecMaker
 	QRY_SKIP = "|$skip|int|The number of items to skip in a result set.|"
 	QRY_COUNT = "|$count|none|The count of related entities can be requested by specifying the $count query option.|"
 
-	HTTP_HEADER_SAMPLE = "| Authorization  | Bearer <code>|" + NEWLINE + "| Workbook-Session-Id  | Workbook session Id that determines if changes are persisted or not. Optional.|"
+	HTTP_HEADER_SAMPLE = "| Authorization | Bearer &lt;code&gt; *Required* |"
 	
 	odata_types = %w[Binary Boolean Byte Date DateTimeOffset Decimal Double Duration 
 				Guid Int Int16 Int32 Int64 SByte Single Stream String TimeOfDay 

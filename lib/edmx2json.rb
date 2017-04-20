@@ -9,8 +9,11 @@ require 'net/https'
 module SpecMaker
 	require_relative 'utils_e2j'
 	# Read and load the CSDL file
-	#f  = Net::HTTP.get(URI.parse('https://graph.microsoft.com/v1.0/$metadata')) 
-	f = File.read('../data/metadata.xml', :encoding => 'UTF-8')
+	#f  = Net::HTTP.get(URI.parse(ga')) 
+	#f  = Net::HTTP.get(URI.parse('https://graph.microsoft-ppe.com/stagingbeta/$metadata')) 
+	#f  = Net::HTTP.get(URI.parse('https://graph.microsoft-ppe.com/beta/$metadata')) 
+	f  = Net::HTTP.get(URI.parse('https://graph.microsoft-ppe.com/testAGSbetaB20170418/$metadata')) 
+	#f = File.read('../data/metadata.xml', :encoding => 'UTF-8')
 
 	# Convert to JSON format. 
 	csdl=JSON.parse(Hash.from_xml(f).to_json, {:symbolize_names => true}) 
@@ -18,6 +21,7 @@ module SpecMaker
 		f.write(JSON.pretty_generate csdl, :encoding => 'UTF-8')
 	end
 	schema = csdl[:Edmx][:DataServices][:Schema]
+	#schema = csdl[:Schema]
 
 	puts "Starting..."
 	# Process all Enums. Load in memory.
@@ -112,7 +116,8 @@ module SpecMaker
 		preserve_object_property_descriptions(@json_object[:name])
 		File.open("#{JSON_SOURCE_FOLDER}#{(@json_object[:name]).downcase}.json", "w") do |f|
 			f.write(JSON.pretty_generate @json_object, :encoding => 'UTF-8')
-		end		
+		end	
+
 		GC.start
 	end
 

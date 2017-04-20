@@ -13,7 +13,7 @@ module SpecMaker
 
 	def self.gen_example (type=nil, method={}, pathAppend=nil)
 		example_lines = []
-		example_lines.push HEADER3 + "Example" + NEWLINE		
+		example_lines.push HEADER3 + "Example" + TWONEWLINES		
 		case type 
 		when 'auto_post'
 			example_lines.push HEADER5 + "Request" + TWONEWLINES										
@@ -30,7 +30,7 @@ module SpecMaker
 
 			example_lines.push "In the request body, supply a JSON representation of [#{method[:returnType]}](../resources/#{method[:returnType].downcase}.md) object." + NEWLINE
 
-			example_lines.push HEADER5 + "Response" + NEWLINE											
+			example_lines.push HEADER5 + "Response" + TWONEWLINES											
 			example_lines.push "Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
 			example_lines.push get_json_response_pretext(method[:returnType]) + NEWLINE
 			modeldump = get_json_model_method(method[:returnType], false, true, true)
@@ -52,7 +52,7 @@ module SpecMaker
 			example_lines.push httpSyntax.join + "/#{pathAppend.to_s}".chomp('/') + NEWLINE
 			example_lines.push "```" + NEWLINE	
 
-			example_lines.push HEADER5 + "Response" + NEWLINE											
+			example_lines.push HEADER5 + "Response" + TWONEWLINES											
 			example_lines.push "Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call." + NEWLINE
 			if type == 'auto_list'
 				modeldump = get_json_model_method(@jsonHash[:collectionOf], true)
@@ -112,7 +112,7 @@ module SpecMaker
 			example_lines.push "```" + NEWLINE	
 		else
 			# example_lines.push "Here is an example of how to call this API." + NEWLINE					
-			example_lines.push HEADER5 + "Request" + NEWLINE		
+			example_lines.push HEADER5 + "Request" + TWONEWLINES		
 			# example_lines.push "Here is an example of the request." + NEWLINE			
 			example_lines.push get_json_request_pretext("#{@jsonHash[:name].downcase}_#{method[:name]}".downcase) + NEWLINE
 			example_lines.push '```http' + NEWLINE
@@ -286,7 +286,7 @@ module SpecMaker
 		
 		httpSyntax = get_syntax(method[:name], top_restpath, pathAppend, method)
 		actionLines.push httpSyntax.join("\n") + NEWLINE
-		actionLines.push NEWLINE + '```' + NEWLINE
+		actionLines.push NEWLINE + '```' + TWONEWLINES
 
 		#Query parameters 
 		if method[:name] == 'auto_get' || method[:name] == 'auto_list'
@@ -294,7 +294,7 @@ module SpecMaker
 		end
 
 		#Request headers  
-		actionLines.push HEADER3 + "Request headers" + NEWLINE
+		actionLines.push HEADER3 + "Request headers" + TWONEWLINES
 		actionLines.push HTTP_HEADER
 		actionLines.push TABLE_2ND_LINE_2COL
 		actionLines.push HTTP_HEADER_SAMPLE + NEWLINE
@@ -337,7 +337,7 @@ module SpecMaker
 		actionLines.push NEWLINE
 
 		#Response body
-		actionLines.push HEADER3 + "Response" + NEWLINE
+		actionLines.push HEADER3 + "Response" + TWONEWLINES
 
 		if !method[:returnType].nil?
 			if SIMPLETYPES.include? method[:returnType] 
@@ -491,7 +491,7 @@ module SpecMaker
 
 		#Request headers  
 		getMethodLines.push NEWLINE + HEADER3 + "Request headers" + NEWLINE
-		getMethodLines.push "| Name      |Description|" + NEWLINE
+		getMethodLines.push "| Name | Description |" + NEWLINE
 		getMethodLines.push "|:----------|:----------|" + NEWLINE
 		getMethodLines.push HTTP_HEADER_SAMPLE + NEWLINE
 		getMethodLines.push NEWLINE
@@ -572,10 +572,10 @@ module SpecMaker
 
 		#Request headers  
 		patchMethodLines.push HEADER3 + "Optional request headers" + NEWLINE
-		patchMethodLines.push "| Name       | Description|" + NEWLINE
+		patchMethodLines.push "| Name | Description |" + NEWLINE
 		patchMethodLines.push "|:-----------|:-----------|" + NEWLINE
 		patchMethodLines.push HTTP_HEADER_SAMPLE  + NEWLINE
-		patchMethodLines.push "| Content-Type  | application/json |" + NEWLINE
+		patchMethodLines.push "| Content-Type	| application/json	|" + NEWLINE
 		patchMethodLines.push NEWLINE
 		
 		#Request body
@@ -598,7 +598,7 @@ module SpecMaker
 		patchMethodLines.push NEWLINE
 
 		#Response body
-		patchMethodLines.push HEADER3 + "Response" + NEWLINE
+		patchMethodLines.push HEADER3 + "Response" + TWONEWLINES
 		patchMethodLines.push "If successful, this method returns a `200 OK` response code and updated [#{@jsonHash[:name]}](../resources/#{@jsonHash[:name].downcase}.md) object in the response body."  + NEWLINE
 
 		#Example
@@ -805,7 +805,7 @@ module SpecMaker
 		# Add property table. 	
 		@mdlines.push NEWLINE
 
-		@mdlines.push HEADER3 + 'Properties' + NEWLINE
+		@mdlines.push HEADER3 + 'Properties' + TWONEWLINES
 		if isProperty
 			@mdlines.push PROPERTY_HEADER + TABLE_2ND_LINE 
 			propreties.each do |prop|
@@ -823,7 +823,7 @@ module SpecMaker
 		# Add Relationship table. 
 		if !@jsonHash[:isComplexType]
 			@mdlines.push NEWLINE
-			@mdlines.push HEADER3 + 'Relationships' + NEWLINE
+			@mdlines.push HEADER3 + 'Relationships' + TWONEWLINES
 			if isRelation
 				@mdlines.push RELATIONSHIP_HEADER + TABLE_2ND_LINE 
 				propreties.each do |prop|
@@ -853,7 +853,7 @@ module SpecMaker
 			jsonpretty = pretty_json(get_json_model(propreties))
 			@mdlines.push jsonpretty + TWONEWLINES
 			
-			@mdlines.push "```" + NEWLINE			
+			@mdlines.push "```" + TWONEWLINES			
 		end
 
 		@mdlines.push NEWLINE + uuid_date + NEWLINE
